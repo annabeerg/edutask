@@ -56,7 +56,7 @@ def test_database_error():
           assert databaseErrorResult == expected
 
 
-"""Extra test for checking the print statement when """
+"""Extra test for checking the print statement when in side the else statement (a whitebox test) """
 @pytest.mark.unit
 def test_UserController_multipleUsers(capsys):
     mockedDAO = mock.MagicMock()
