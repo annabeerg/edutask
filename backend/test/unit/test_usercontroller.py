@@ -5,11 +5,10 @@ from src.controllers.usercontroller import UserController
 
 @pytest.fixture
 def sut(daoList):
-
         mockedDAO = mock.MagicMock()
 
         mockedDAO.find.return_value = daoList
-  
+
         mockedReturnValue = UserController(dao=mockedDAO)
         return mockedReturnValue
 
@@ -24,7 +23,7 @@ def sut(daoList):
 )
 def test_valid_email(sut, expected):
     ValidEmailResult = sut.get_user_by_email(email="maria@maria.se")
-   
+
     assert ValidEmailResult == expected
 
 """test if Value Error is throen if email is not valid"""
@@ -46,14 +45,14 @@ def test_database_error():
     mockedDAO = mock.MagicMock()
 
     mockedDAO.find.return_value = Exception
-  
+
     mockedReturnValue = UserController(dao=mockedDAO)
-     
+
     with pytest.raises(Exception):
-          expected = {"email": 'maria@maria.se'}
-          databaseErrorResult = mockedReturnValue.get_user_by_email(email="maria@maria.se")
-    
-          assert databaseErrorResult == expected
+        expected = {"email": 'maria@maria.se'}
+        databaseErrorResult = mockedReturnValue.get_user_by_email(email="maria@maria.se")
+
+        assert databaseErrorResult == expected
 
 
 """Extra test for checking the print statement when in side the else statement (a whitebox test) """
@@ -62,9 +61,9 @@ def test_UserController_multipleUsers(capsys):
     mockedDAO = mock.MagicMock()
 
     mockedDAO.find.return_value = [{"email": 'maria@maria.se'}, {"email": 'maria@maria.se'}, {"email": 'maria@maria.se'}]
-  
+
     mockedUser = UserController(dao=mockedDAO)
-     
+
     mockedUser.get_user_by_email(email='maria@maria.se')
     captured_print = capsys.readouterr()
     assert captured_print.out == 'Error: more than one user found with mail maria@maria.se\n'
