@@ -2,7 +2,7 @@ name: Pytest
 
 on:
   push:
-    branches: [ "auto"]
+    branches: [ "main"]
   pull_request: 
     branches: ["main"]
   workflow_dispatch:
