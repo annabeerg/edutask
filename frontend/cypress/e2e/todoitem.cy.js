@@ -46,69 +46,29 @@ describe('Test to se if we can manipulating a todolist', () => {
   //         ###
   //     PRE CONDITIONS
   //          ###
-   //          ###
+  //          ###
   beforeEach(function () {
     // enter the main page
     cy.visit('http://localhost:3000')
     //If error by testing occur, see is user still exist. Delete and recreate user and initial item.
-    cy.request({
-      method: 'GET',
-      url: `http://localhost:5000/users/${uid}`,
-      failOnStatusCode: false
-  }).then((response) => {
-      if (response.status === 200) {
-        cy.request({
-          method: 'DELETE',
-          url: `http://localhost:5000/users/${uid}`
-        }).then((response) => {
-          cy.log(response.body)
-        })
-      }
 
-      cy.fixture('user.json')
-      .then((user) => {
-        cy.request({
-          method: 'POST',
-          url: 'http://localhost:5000/users/create',
-          form: true,
-          body: user
-        }).then((response) => {
-          uid = response.body._id.$oid
-          email = user.email
-        })
-      })
-    cy.log(`user: ${response.body.email} has been created`)
-
-    cy.fixture('task.json')
-    .then((task) => {
-      task.userid = uid
-      cy.request({
-        method: 'POST',
-        url: 'http://localhost:5000/tasks/create',
-        form: true,
-        body: task
-      }).then((response) => {
-        title = task.title
-      })
 
     // PRECONDITION 1 - Usr autenticated
     // detect a div which contains "Email Address", find the input and type (in a declarative way)
     cy.contains('div', 'Email Address')
-    .find('input[type=text]')
-    .type(email)
+      .find('input[type=text]')
+      .type(email)
     // submit the form on this page
     cy.get('form')
       .submit()
     // assert that the user is now logged in
 
-  // PRECONDITION 2 - At least 1 task created
-  // Happens in fixture (task.json)
+    // PRECONDITION 2 - At least 1 task created
+    // Happens in fixture (task.json)
 
     // PRECONDITION 3 - views the created task in detail view mode
     cy.contains('div', title)
-    .click()
-    })
-    })
+      .click()
   })
 
   //  Now all the preconditions are set. We have logged in with auth user. 
@@ -145,7 +105,7 @@ describe('Test to se if we can manipulating a todolist', () => {
   describe("R8UC2", () => {
     // test to see if the item is struck through when the first span of the todo list item is clicked
     it('Should have a text decoration of line-trough if toggled', () => {
-      cy.get('.todo-list').get('.todo-item').last().find('span').eq(0).trigger('click')
+      cy.get('.todo-list').get('.todo-item').last().find('span').eq(0).trigger('click', { force: true })
         .then(() => {
           cy.get('.todo-list').get('.todo-item').last().find('span').eq(0).should('have.class', 'checked')
           cy.get('.todo-list').get('.todo-item').last().find('.checker.checked + .editable').should('have.css', 'text-decoration', 'line-through solid rgb(49, 46, 46)')
